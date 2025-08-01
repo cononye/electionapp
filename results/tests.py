@@ -104,3 +104,10 @@ class ResultSubmissionAPITestCase(TestCase):
         response = self.client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('polling_unit_code', response.data)
+
+    def test_index_view_returns_200(self):
+        """Test that the index view returns a 200 OK status code and correct title."""
+        url = reverse('index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, "<title>Election Result Submission</title>")

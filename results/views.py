@@ -22,3 +22,11 @@ class SubmitResultView(CreateAPIView):
         Pass the request context to the serializer.
         """
         return {'request': self.request}
+
+from django.shortcuts import render
+
+def index_view(request):
+    """
+    Serves the main index.html page.
+    """
+    return render(request, 'index.html')

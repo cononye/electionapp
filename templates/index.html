@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Result Submission</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 600px; margin: auto; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        label { font-weight: bold; }
+        input, textarea, button { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #007bff; color: white; cursor: pointer; border: none; }
+        #status { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <h1>Submit Election Result</h1>
+    <p>
+        Use this form to submit results from a polling unit.
+        To submit as an agent, provide your Agent Code.
+        To submit as a public user, leave the Agent Code blank (you must be logged in).
+    </p>
+
+    <form id="result-form">
+        <label for="agent-code">Agent Code (Optional)</label>
+        <input type="text" id="agent-code" name="agent_code" placeholder="Enter your agent code if you have one">
+
+        <label for="pu-code">Polling Unit Code</label>
+        <input type="text" id="pu-code" name="polling_unit_code" required>
+
+        <label for="scores">Scores (JSON format)</label>
+        <textarea id="scores" name="scores" rows="4" required placeholder='{"APC": 100, "PDP": 85, "LP": 120}'></textarea>
+
+        <label for="image">Result Form Image</label>
+        <input type="file" id="image" name="result_form_image" accept="image/*" required>
+
+        <button type="submit">Submit Result</button>
+    </form>
+
+    <div id="status"></div>
+
+    <script>
+        document.getElementById('result-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const statusDiv = document.getElementById('status');
+            const formData = new FormData(form);
+
+            // The 'scores' field needs to be sent as a JSON string, but it's already a string from the textarea.
+            // No special handling needed unless we wanted to validate it on the frontend first.
+
+            statusDiv.className = '';
+            statusDiv.textContent = 'Submitting...';
+
+            const headers = {};
+            const agentCode = formData.get('agent_code');
+            if (agentCode) {
+                headers['X-Agent-Code'] = agentCode;
+            }
+
+            // We need to remove agent_code from the FormData since it's not part of the API model
+            formData.delete('agent_code');
+
+            try {
+                const response = await fetch('/api/results/submit/', {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusDiv.className = 'success';
+                    statusDiv.textContent = 'Result submitted successfully! Submission ID: ' + data.id;
+                    form.reset();
+                } else {
+                    statusDiv.className = 'error';
+                    // Format the error message
+                    let errorMessage = 'An error occurred.';
+                    if (typeof data === 'object' && data !== null) {
+                        errorMessage = Object.entries(data)
+                            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+                            .join('; ');
+                    }
+                    statusDiv.textContent = 'Error: ' + errorMessage;
+                }
+            } catch (error) {
+                statusDiv.className = 'error';
+                statusDiv.textContent = 'A network error occurred. Please try again.';
+                console.error('Submission error:', error);
+            }
+        });
+    </script>
+
+</body>
+</html>
