@@ -21,6 +21,10 @@ from results import views as result_views
 
 urlpatterns = [
     path("", result_views.index_view, name="index"),
+    path("public-dashboard/", result_views.public_dashboard_view, name="public-dashboard-page"),
+    path("party-dashboard/", result_views.party_dashboard_view, name="party-dashboard-page"),
+    path("guides/agent/", result_views.agent_guide_view, name="agent-guide"),
+    path("guides/public/", result_views.public_guide_view, name="public-guide"),
     path("admin/", admin.site.urls),
     path("api/results/", include("results.urls")),
 ]

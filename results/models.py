@@ -39,6 +39,7 @@ class ResultSubmission(models.Model):
     scores = models.JSONField()
     source = models.CharField(max_length=10, choices=SOURCE_CHOICES)
     submitted_at = models.DateTimeField(auto_now_add=True)
+    ocr_text = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Submission for {self.polling_unit} at {self.submitted_at}"
@@ -55,6 +56,7 @@ class Discrepancy(models.Model):
     description = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='unresolved')
     created_at = models.DateTimeField(auto_now_add=True)
+    ocr_results = models.JSONField(default=dict)
 
     def __str__(self):
         return f"Discrepancy for {self.polling_unit}"

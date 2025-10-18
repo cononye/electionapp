@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent User Guide</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 2em; max-width: 800px; margin: auto; }
+        h1, h2 { color: #333; }
+        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Agent User Guide</h1>
+
+    <h2>1. Authenticating as an Agent</h2>
+    <p>
+        To submit results or view your party's dashboard, you must authenticate using your unique agent code. This code is provided to you by your party administrator.
+    </p>
+    <p>
+        When using an API tool or the Party Leader Dashboard, you will need to provide this code in a special header called <code>X-Agent-Code</code>.
+    </p>
+
+    <h2>2. Submitting Results</h2>
+    <p>
+        Result submission is done via a <code>POST</code> request to the <code>/api/results/submit/</code> endpoint. You must include your agent code in the headers.
+    </p>
+    <p>The request body must be in <code>multipart/form-data</code> format and include the following fields:</p>
+    <ul>
+        <li><code>polling_unit_code</code>: The unique code for your polling unit.</li>
+        <li><code>scores</code>: A JSON string mapping party acronyms to vote counts. Example: <code>{"PA": 150, "PB": 120}</code>.</li>
+        <li><code>result_form_image</code>: An image file of the official result sheet.</li>
+    </ul>
+
+    <h2>3. Viewing the Party Dashboard</h2>
+    <p>
+        You can view your party's dashboard by navigating to the <a href="/party-dashboard/">Party Leader Dashboard</a> page and entering your agent code. This dashboard provides real-time statistics on your party's submissions and any unresolved discrepancies.
+    </p>
+</body>
+</html>

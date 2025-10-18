@@ -110,4 +110,4 @@ class ResultSubmissionAPITestCase(TestCase):
         url = reverse('index')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertContains(response, "<title>Election Result Submission</title>")
+        self.assertContains(response, "<title>Election Results Tracker</title>")

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Dashboard</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 2em; }
+        .metric { margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+    <h1>Public Dashboard</h1>
+    <div id="dashboard-data">
+        Loading...
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/results/dashboard/public/')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('dashboard-data');
+                    let html = '<h2>National Results</h2>';
+                    html += '<ul>';
+                    for (const party in data.national_results) {
+                        html += `<li>${party}: ${data.national_results[party]}</li>`;
+                    }
+                    html += '</ul>';
+                    html += `<div class="metric"><strong>Total Disputed Polling Units:</strong> ${data.total_disputes}</div>`;
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching dashboard data:', error);
+                    document.getElementById('dashboard-data').innerHTML = 'Failed to load dashboard data.';
+                });
+        });
+    </script>
+</body>
+</html>

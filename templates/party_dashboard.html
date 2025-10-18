@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Leader Dashboard</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 2em; }
+        .metric { margin-bottom: 1em; }
+        #auth-form { margin-bottom: 2em; }
+    </style>
+</head>
+<body>
+    <h1>Party Leader Dashboard</h1>
+
+    <div id="auth-form">
+        <input type="text" id="agent-code" placeholder="Enter Your Agent Code">
+        <button onclick="fetchPartyData()">Get Dashboard</button>
+    </div>
+
+    <div id="dashboard-data">
+        <!-- Data will be loaded here -->
+    </div>
+
+    <script>
+        function fetchPartyData() {
+            const agentCode = document.getElementById('agent-code').value;
+            if (!agentCode) {
+                alert('Please enter an agent code.');
+                return;
+            }
+
+            fetch('/api/results/dashboard/party/', {
+                headers: {
+                    'X-Agent-Code': agentCode
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Authentication failed or server error.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('dashboard-data');
+                let html = `<h2>Dashboard for ${data.party_name}</h2>`;
+                html += `<div class="metric"><strong>Total Submissions by Your Agents:</strong> ${data.total_agent_submissions}</div>`;
+                html += `<div class="metric"><strong>Unresolved Discrepancies:</strong> ${data.unresolved_discrepancies}</div>`;
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching party dashboard data:', error);
+                document.getElementById('dashboard-data').innerHTML = 'Failed to load dashboard data. Please check your agent code and try again.';
+            });
+        }
+    </script>
+</body>
+</html>

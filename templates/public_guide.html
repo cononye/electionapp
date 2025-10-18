@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public User Guide</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 2em; max-width: 800px; margin: auto; }
+        h1, h2 { color: #333; }
+        .data-source { font-style: italic; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Public User Guide</h1>
+
+    <h2>1. Viewing Election Results</h2>
+    <p>
+        You can view the latest aggregated election results on the <a href="/public-dashboard/">Public Dashboard</a>. This dashboard provides a real-time overview of the national results as they are reported.
+    </p>
+
+    <h2>2. Understanding the Data</h2>
+    <p>The data on the public dashboard comes from two main sources:</p>
+    <ul>
+        <li><strong class="data-source">Certified Results:</strong> These are results submitted by official party agents who are registered and authenticated in our system. These results are generally considered more reliable.</li>
+        <li><strong class="data-source">Crowdsourced Results:</strong> These are results submitted by members of the public. While valuable, they are not officially certified.</li>
+    </ul>
+    <p>
+        The system automatically compares these two sources. When there is a mismatch, the result for that polling unit is marked as "disputed" until it can be manually reviewed. The "Total Disputed Polling Units" metric on the dashboard shows how many such disputes are currently unresolved.
+    </p>
+
+    <h2>3. Submitting Your Own Results (Crowdsourcing)</h2>
+    <p>
+        If you would like to contribute to the crowdsourced data, you can do so by creating an account and submitting the results from your polling unit. This helps ensure the transparency and accuracy of the election.
+    </p>
+    <p>
+        To submit, you will need to provide the polling unit details, the vote counts for each party, and an image of the official result form.
+    </p>
+</body>
+</html>
