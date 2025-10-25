@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import ResultSubmission, PollingUnit, Party
+from .services import process_result_submission
 
 class ResultSubmissionSerializer(serializers.ModelSerializer):
     polling_unit_code = serializers.CharField(write_only=True)
@@ -31,4 +32,6 @@ class ResultSubmissionSerializer(serializers.ModelSerializer):
             submission_data['submitted_by_user'] = user
             submission_data['source'] = 'public'
 
-        return ResultSubmission.objects.create(**submission_data)
+        submission = ResultSubmission.objects.create(**submission_data)
+        process_result_submission(submission.id)
+        return submission

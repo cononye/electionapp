@@ -31,12 +31,24 @@ class ResultSubmission(models.Model):
         ('agent', 'Agent'),
         ('public', 'Public'),
     )
+    VERIFICATION_STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('verified', 'Verified'),
+        ('discrepancy', 'Discrepancy'),
+        ('error', 'Error'),
+    )
 
     polling_unit = models.ForeignKey(PollingUnit, on_delete=models.CASCADE, related_name='submissions')
     submitted_by_agent = models.ForeignKey(Agent, on_delete=models.SET_NULL, null=True, blank=True)
     submitted_by_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     result_form_image = models.ImageField(upload_to='result_forms/')
     scores = models.JSONField()
+    ocr_scores = models.JSONField(null=True, blank=True)
+    verification_status = models.CharField(
+        max_length=20,
+        choices=VERIFICATION_STATUS_CHOICES,
+        default='pending'
+    )
     source = models.CharField(max_length=10, choices=SOURCE_CHOICES)
     submitted_at = models.DateTimeField(auto_now_add=True)
 
